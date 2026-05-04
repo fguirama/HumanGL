@@ -1,7 +1,7 @@
 # ---------- VARIABLE ----------------------------------------------------------------- #
 INCS		:=	\
 				class/x.hpp\
-				humandGL.h\
+				humanGL.h\
 
 SRCS		:=	\
 				class/x.cpp\
