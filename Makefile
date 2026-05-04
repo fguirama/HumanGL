@@ -1,11 +1,8 @@
 # ---------- VARIABLE ----------------------------------------------------------------- #
 INCS		:=	\
-				class/x.hpp\
 				humanGL.h\
 
 SRCS		:=	\
-				class/x.cpp\
-				utils/x.cpp\
 				main.cpp\
 
 INCS_D		:=	incs/
@@ -21,16 +18,14 @@ NAME		:=	humanGL#
 # ---------- FLAGS -------------------------------------------------------------------- #
 CXX			:=	c++
 RM			:=	rm -rf
-IFLAGS		:=	-I$(INCS_D) -I$(IRCLIB_I)
-DFLAGS		=	-MMD -MP -MT $@ -MF $(DEPS_D)$*.d
-CFLAGS		=	-Wall -Wextra -Werror -std=c++98 -g3 $(IFLAGS)
+FLAGS		=	-Werror -Wall -Wextra -MMD -MP -std=c++17 -g3
 
 
 # ---------- DEBUG -------------------------------------------------------------------- #
 DEBUG		=	no
 
 ifeq ($(DEBUG), yes)
-	CFLAGS	+=	-fsanitize=address -DDEBUG=true
+	FLAGS	+=	-fsanitize=address -DDEBUG=true
 endif
 
 VALGRIND	:=	valgrind \
@@ -47,10 +42,10 @@ bonus		:	all
 			make -C ./bonus/
 
 $(NAME)		:	$(OBJS) $(IRCLIB_A)
-			$(CXX) $(CFLAGS) -o $(NAME) $(OBJS) $(IRCLIB_A)
+			$(CXX) $(FLAGS) -L/opt/homebrew/lib -lSDL2 -framework OpenGL -o $(NAME) $(OBJS)
 
 $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.cpp | $(OBJS_D) $(DEPS_D)
-			$(CXX) $(CFLAGS) $(DFLAGS) -c $< -o $@
+			$(CXX) $(FLAGS) -I/opt/homebrew/include -I$(INCS_D) -c $< -o $@
 
 $(OBJS_D)	:
 			mkdir -p $(OBJS_D)
@@ -73,11 +68,9 @@ debug		:
 
 clean		:
 			$(RM) $(OBJS) $(OBJS_D) $(DEPS_D)
-			$(MAKE) clean -C $(IRCLIB_D)
 
 fclean		:	clean
 			$(RM) $(NAME)
-			$(MAKE) fclean -C $(IRCLIB_D)
 
 re			:	fclean all
 
