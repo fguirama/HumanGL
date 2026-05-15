@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <memory>
 
 #define WIDTH 800
 #define HEIGHT 600

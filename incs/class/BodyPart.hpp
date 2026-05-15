@@ -1,12 +1,14 @@
 #ifndef HUMANDGL_BODYPART_HPP
 # define HUMANDGL_BODYPART_HPP
 
-#include "humanGL.h"
+#include <memory>
+#include <string>
 #include <vector>
+#include "humanGL.h"
 
 class BodyPart {
 public:
-	explicit BodyPart(const std::string& n);
+	explicit BodyPart(const std::string &n);
 	~BodyPart();
 
 	void	setLocalPosition(float x, float y, float z);
