@@ -1,9 +1,14 @@
 # ---------- VARIABLE ----------------------------------------------------------------- #
 INCS		:=	\
 				humanGL.h\
+				class/BodyPart.hpp\
+				class/Character.hpp
 
 SRCS		:=	\
-				main.cpp\
+				class/BodyPart.cpp\
+				class/Character.cpp\
+				utils/draw.cpp\
+				main.cpp
 
 INCS_D		:=	incs/
 SRCS_D		:=	srcs/
@@ -58,10 +63,10 @@ $(DEPS_D)	:
 			mkdir -p $(DEPS_D)utils/
 
 leaks		:	all
-			$(VALGRIND) ./$(NAME) $(ARGS)
+			$(VALGRIND) ./$(NAME)
 
 run			:	all
-			./$(NAME) $(ARGS)
+			./$(NAME)
 
 debug		:
 			$(MAKE) re DEBUG=yes
