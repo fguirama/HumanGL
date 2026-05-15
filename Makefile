@@ -4,6 +4,9 @@ INCS		:=	\
 
 SRCS		:=	\
 				main.cpp\
+				Matrix4.cpp\
+				MatrixStack.cpp\
+				Vector4.cpp\
 
 INCS_D		:=	incs/
 SRCS_D		:=	srcs/
