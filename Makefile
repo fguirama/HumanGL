@@ -1,10 +1,12 @@
 # ---------- VARIABLE ----------------------------------------------------------------- #
 INCS		:=	\
 				humanGL.h\
+				class/Window.hpp\
 				class/BodyPart.hpp\
 				class/Character.hpp
 
 SRCS		:=	\
+				class/Window.cpp\
 				class/BodyPart.cpp\
 				class/Character.cpp\
 				utils/draw.cpp\
