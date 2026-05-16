@@ -13,6 +13,13 @@ Vector4::Vector4(double x, double y, double z) {
     vector[3] = 1;
 }
 
+Vector4::Vector4(double x, double y, double z, double w) {
+    vector[0] = x;
+    vector[1] = y;
+    vector[2] = z;
+    vector[3] = w;
+}
+
 Vector4::Vector4(double vec[4]) {
     for (int i = 0; i < 4; i++)
         vector[i] = vec[i];
