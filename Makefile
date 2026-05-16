@@ -3,13 +3,20 @@ INCS		:=	\
 				humanGL.h\
 				class/Window.hpp\
 				class/BodyPart.hpp\
-				class/Character.hpp
+				class/Character.hpp\
+				class/Matrix4.hpp\
+				class/MatrixStack.hpp\
+				class/Vector4.hpp
 
 SRCS		:=	\
 				class/Window.cpp\
 				class/BodyPart.cpp\
 				class/Character.cpp\
+				class/Matrix4.cpp\
+				class/MatrixStack.cpp\
+				class/Vector4.cpp\
 				utils/draw.cpp\
+				utils/multiply.cpp\
 				main.cpp
 
 INCS_D		:=	incs/
@@ -49,7 +56,7 @@ bonus		:	all
 			make -C ./bonus/
 
 $(NAME)		:	$(OBJS) $(IRCLIB_A)
-			$(CXX) $(FLAGS) -L/opt/homebrew/lib -lSDL2 -framework OpenGL -o $(NAME) $(OBJS)
+			$(CXX) $(FLAGS) -L/opt/homebrew/lib -lGLEW -lSDL2 -framework OpenGL -o $(NAME) $(OBJS)
 
 $(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.cpp | $(OBJS_D) $(DEPS_D)
 			$(CXX) $(FLAGS) -I/opt/homebrew/include -I$(INCS_D) -c $< -o $@
