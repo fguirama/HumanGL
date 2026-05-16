@@ -11,7 +11,6 @@ enum Axis {
 
 class Matrix4 {
     public:
-        double  matrix[4][4];
 
         Matrix4();
         explicit Matrix4(const double matrix[4][4]);
@@ -27,6 +26,10 @@ class Matrix4 {
 
         Matrix4 operator*(Matrix4 const& other) const;
         Vector4 operator*(Vector4 const& vec) const;
+		void	toFloatArray(float res[16]) const;
+
+private:
+        double  _matrix[4][4];
 };
 
 #endif
