@@ -6,7 +6,8 @@ INCS		:=	\
 				class/Character.hpp\
 				class/Matrix4.hpp\
 				class/MatrixStack.hpp\
-				class/Vector4.hpp
+				class/Vector4.hpp\
+				class/Color.hpp
 
 SRCS		:=	\
 				class/Window.cpp\
@@ -15,6 +16,7 @@ SRCS		:=	\
 				class/Matrix4.cpp\
 				class/MatrixStack.cpp\
 				class/Vector4.cpp\
+				class/Color.cpp\
 				utils/draw.cpp\
 				main.cpp
 

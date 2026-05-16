@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "Color.hpp"
 #include "humanGL.h"
 
 class BodyPart {
@@ -22,6 +23,7 @@ private:
 	Vector4		_localPosition;
 	Vector4		_localRotation;
 	Vector4		_localScale;
+	Color		_color;
 	BodyPart								*_parent = nullptr;
 	std::vector<std::unique_ptr<BodyPart>>	_children;
 };
