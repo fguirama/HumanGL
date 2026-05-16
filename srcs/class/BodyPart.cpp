@@ -4,7 +4,7 @@
 BodyPart::BodyPart(const std::string &n) : _name(n), _color("#ffffff") {
 	this->_localPosition = Vector4(0.0, 0.0, 0.0);
 	this->_localRotation = Vector4(0.0, 0.0, 0.0);
-	this->_localScale    = Vector4(1.0, 1.0, 1.0);
+	this->_localScale = Vector4(1.0, 1.0, 1.0);
 	this->_geometryOffset = Vector4(0.0, 0.0, 0.0);
 }
 
