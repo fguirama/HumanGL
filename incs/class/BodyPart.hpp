@@ -23,6 +23,9 @@ public:
 	void		draw(MatrixStack &stack, const Matrix4 &view_proj) const;
 
 private:
+	Matrix4		jointMatrix() const;
+	Matrix4		drawMatrix() const;
+
 	std::string	_name;
 	Vector4		_localPosition;
 	Vector4		_localRotation;
