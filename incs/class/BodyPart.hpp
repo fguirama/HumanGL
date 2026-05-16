@@ -19,9 +19,9 @@ public:
 
 private:
 	std::string	_name;
-	Vec3		_localPosition{};
-	Vec3		_localRotation{};
-	Vec3		_localScale{};
+	Vector4		_localPosition;
+	Vector4		_localRotation;
+	Vector4		_localScale;
 	BodyPart								*_parent = nullptr;
 	std::vector<std::unique_ptr<BodyPart>>	_children;
 };
