@@ -1,6 +1,8 @@
 #ifndef Matrix4_HPP
 # define Matrix4_HPP
 
+#include "Vector4.hpp"
+
 enum Axis {
     X,
     Y,
@@ -22,6 +24,9 @@ class Matrix4 {
         void    translation(double x, double y, double z);
         void    scaling(double x, double y, double z);
         void    rotation(double angle, Axis axis);
+
+        Matrix4 operator*(Matrix4 const& other) const;
+        Vector4 operator*(Vector4 const& vec) const;
 };
 
 #endif

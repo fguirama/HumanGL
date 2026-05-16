@@ -1,5 +1,5 @@
 #include "class/Matrix4.hpp"
-#include <iostream>
+#include <cmath>
 
 Matrix4::Matrix4() {
     for (int i = 0; i < 4; i++) {
@@ -9,7 +9,7 @@ Matrix4::Matrix4() {
     }
 }
 
-Matrix4::Matrix4(int mat[4][4]) {
+Matrix4::Matrix4(const double mat[4][4]) {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             matrix[i][j] = mat[i][j];
@@ -50,24 +50,24 @@ void Matrix4::identity() {
     }
 }
 
-void Matrix4::translation(int x, int y, int z) {
+void Matrix4::translation(double x, double y, double z) {
     identity();
     matrix[0][3] = x;
     matrix[1][3] = y;
     matrix[2][3] = z;
 }
 
-void Matrix4::scaling(int x, int y, int z) {
+void Matrix4::scaling(double x, double y, double z) {
+    identity();
     matrix[0][0] = x;
     matrix[1][1] = y;
     matrix[2][2] = z;
-    matrix[3][3] = 1;
 }
 
-void Matrix4::rotation(float angle, Axis axis) {
+void Matrix4::rotation(double angle, Axis axis) {
     identity();
-    double cosinus = cos(angle);
-    double sinus = sin(angle);
+    double cosinus = std::cos(angle);
+    double sinus = std::sin(angle);
     switch (axis) {
         case X:
             matrix[1][1] = cosinus;
@@ -87,4 +87,34 @@ void Matrix4::rotation(float angle, Axis axis) {
             matrix[1][0] = sinus;
             matrix[0][1] = -sinus;
     }
+}
+
+Matrix4 Matrix4::operator*(Matrix4 const& other) const {
+    Matrix4 res;
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            double sum = 0;
+            for (int k = 0; k < 4; k++) {
+                sum += matrix[i][k] * other.matrix[k][j];
+            }
+            res.matrix[i][j] = sum;
+        }
+    }
+
+    return res;
+}
+
+Vector4 Matrix4::operator*(Vector4 const& vec) const {
+    double res[4];
+
+    for (int i = 0; i < 4; i++) {
+        double sum = 0;
+        for (int j = 0; j < 4; j++) {
+            sum += matrix[i][j] * vec.vector[j];
+        }
+        res[i] = sum;
+    }
+
+    return Vector4(res);
 }
