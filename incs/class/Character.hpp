@@ -4,6 +4,12 @@
 #include "MatrixStack.hpp"
 #include "class/BodyPart.hpp"
 
+enum class AnimationState {
+	Idle,
+	Walk,
+	Jump
+};
+
 class Character {
 public:
 	Character();
