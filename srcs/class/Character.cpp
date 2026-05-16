@@ -114,3 +114,84 @@ void	Character::reset() {
 	torso.reset();
 	this->init();
 }
+
+void Character::update(float time_seconds, AnimationState state) {
+	const float walk_speed = 2.8f;
+	const float walk_amplitude = 0.7f;
+	const float forearm_bend = 0.35f;
+	const float knee_bend = 0.45f;
+	const float jump_speed = 2.2f;
+	const float jump_height = 0.7f;
+
+	torso->setLocalPosition(0.0f, 0.0f, 0.0f);
+
+	if (head)
+		head->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (leftUpperArm)
+		leftUpperArm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (rightUpperArm)
+		rightUpperArm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (leftForearm)
+		leftForearm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (rightForearm)
+		rightForearm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (leftThigh)
+		leftThigh->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (rightThigh)
+		rightThigh->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (leftLowerLeg)
+		leftLowerLeg->setLocalRotation(0.0f, 0.0f, 0.0f);
+	if (rightLowerLeg)
+		rightLowerLeg->setLocalRotation(0.0f, 0.0f, 0.0f);
+
+	if (state == AnimationState::Walk) {
+		const float phase = std::sin(time_seconds * walk_speed);
+		const float swing = phase * walk_amplitude;
+		const float bend = std::max(0.0f, std::sin(time_seconds * walk_speed)) * forearm_bend;
+		const float knee = std::max(0.0f, -std::sin(time_seconds * walk_speed)) * knee_bend;
+
+		if (leftUpperArm)
+			leftUpperArm->setLocalRotation(swing, 0.0f, 0.0f);
+		if (rightUpperArm)
+			rightUpperArm->setLocalRotation(-swing, 0.0f, 0.0f);
+		if (leftThigh)
+			leftThigh->setLocalRotation(-swing, 0.0f, 0.0f);
+		if (rightThigh)
+			rightThigh->setLocalRotation(swing, 0.0f, 0.0f);
+		if (leftForearm)
+			leftForearm->setLocalRotation(-bend, 0.0f, 0.0f);
+		if (rightForearm)
+			rightForearm->setLocalRotation(-bend, 0.0f, 0.0f);
+		if (leftLowerLeg)
+			leftLowerLeg->setLocalRotation(knee, 0.0f, 0.0f);
+		if (rightLowerLeg)
+			rightLowerLeg->setLocalRotation(knee, 0.0f, 0.0f);
+	}
+
+	if (state == AnimationState::Jump) {
+		const float jump_phase = std::max(0.0f, std::sin(time_seconds * jump_speed));
+		torso->setLocalPosition(0.0f, jump_phase * jump_height, 0.0f);
+		if (leftUpperArm)
+			leftUpperArm->setLocalRotation(-0.6f, 0.0f, 0.0f);
+		if (rightUpperArm)
+			rightUpperArm->setLocalRotation(-0.6f, 0.0f, 0.0f);
+		if (leftForearm)
+			leftForearm->setLocalRotation(-0.3f, 0.0f, 0.0f);
+		if (rightForearm)
+			rightForearm->setLocalRotation(-0.3f, 0.0f, 0.0f);
+		if (leftThigh)
+			leftThigh->setLocalRotation(0.6f, 0.0f, 0.0f);
+		if (rightThigh)
+			rightThigh->setLocalRotation(0.6f, 0.0f, 0.0f);
+		if (leftLowerLeg)
+			leftLowerLeg->setLocalRotation(-0.6f, 0.0f, 0.0f);
+		if (rightLowerLeg)
+			rightLowerLeg->setLocalRotation(-0.6f, 0.0f, 0.0f);
+	}
+}
+
+void Character::draw(MatrixStack &stack, const Matrix4 &view_proj) const {
+	if (!torso)
+		return;
+	torso->draw(stack, view_proj);
+}
