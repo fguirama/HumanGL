@@ -7,7 +7,6 @@ Color::Color(const std::string &str) {
 	this->_r = std::stoi(str.substr(1, 2), nullptr, 16) / 255.0f;
 	this->_g = std::stoi(str.substr(3, 2), nullptr, 16) / 255.0f;
 	this->_b = std::stoi(str.substr(5, 2), nullptr, 16) / 255.0f;
-	std::cout << "str" << str << " r" << this->_r << " g" << this->_g << " b" << this->_b << std::endl;
 }
 
 Color::Color(const Color &src) { *this = src; }
