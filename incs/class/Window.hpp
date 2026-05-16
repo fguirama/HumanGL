@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <memory>
+#include "class/Character.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -19,7 +20,9 @@ public:
 private:
 	const std::string												_title;
 	std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)>		_window;
-	std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)>	_renderer;
+	SDL_GLContext													_glContext = nullptr;
+	bool															_running = false;
+	AnimationState													_state = AnimationState::Idle;
 };
 
 #endif
