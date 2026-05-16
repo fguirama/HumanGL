@@ -1,4 +1,4 @@
-#include "../incs/Matrix4.hpp"
+#include "class/Matrix4.hpp"
 #include <iostream>
 
 Matrix4::Matrix4() {

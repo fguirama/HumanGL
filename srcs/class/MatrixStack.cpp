@@ -1,4 +1,4 @@
-#include "../incs/MatrixStack.hpp"
+#include "class/MatrixStack.hpp"
 
 MatrixStack::MatrixStack() {}
 

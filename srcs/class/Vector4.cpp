@@ -1,4 +1,4 @@
-#include "../incs/Vector4.hpp"
+#include "class/Vector4.hpp"
 
 Vector4::Vector4() {
     for (int i = 0; i < 3; i++)
