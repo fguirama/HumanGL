@@ -15,6 +15,9 @@ class MatrixStack {
 
         void	push(Matrix4 matrix);
         Matrix4	pop();
+        Matrix4 const& top() const;
+        bool	empty() const;
+        void	clear();
 };
 
 #endif

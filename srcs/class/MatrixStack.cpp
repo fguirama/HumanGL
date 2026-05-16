@@ -25,3 +25,17 @@ Matrix4 MatrixStack::pop() {
     stack.pop();
     return top;
 }
+
+Matrix4 const& MatrixStack::top() const {
+    return stack.top();
+}
+
+bool MatrixStack::empty() const {
+    return stack.empty();
+}
+
+void MatrixStack::clear() {
+    while (!stack.empty()) {
+        stack.pop();
+    }
+}
