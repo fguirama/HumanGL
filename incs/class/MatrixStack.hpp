@@ -6,18 +6,19 @@
 
 class MatrixStack {
     public:
-        std::stack<Matrix4>	stack;
 
         MatrixStack();
         ~MatrixStack();
         MatrixStack(MatrixStack const& copy);
         MatrixStack	&operator=(MatrixStack const& other);
 
-        void	push(Matrix4 matrix);
-        Matrix4	pop();
-        Matrix4 const& top() const;
-        bool	empty() const;
-        void	clear();
+        void			push(Matrix4 matrix);
+        Matrix4			pop();
+        const Matrix4	&top() const;
+        bool			empty() const;
+        void			clear();
+	private:
+        std::stack<Matrix4>	_stack;
 };
 
 #endif

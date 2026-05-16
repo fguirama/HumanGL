@@ -5,37 +5,37 @@ MatrixStack::MatrixStack() {}
 MatrixStack::~MatrixStack() {}
 
 MatrixStack::MatrixStack(MatrixStack const& copy) {
-    stack = copy.stack;
+    this->_stack = copy._stack;
 }
 
 MatrixStack& MatrixStack::operator=(MatrixStack const& other) {
     if (this != &other) {
-        stack = other.stack;
+        this->_stack = other._stack;
     }
 
-    return *this;
+    return (*this);
 }
 
 void MatrixStack::push(Matrix4 matrix) {
-    stack.push(matrix);
+    this->_stack.push(matrix);
 }
 
 Matrix4 MatrixStack::pop() {
-    Matrix4 top = stack.top();
-    stack.pop();
-    return top;
+    Matrix4 top = this->_stack.top();
+    this->_stack.pop();
+    return (top);
 }
 
 Matrix4 const& MatrixStack::top() const {
-    return stack.top();
+    return (this->_stack.top());
 }
 
 bool MatrixStack::empty() const {
-    return stack.empty();
+    return (this->_stack.empty());
 }
 
 void MatrixStack::clear() {
-    while (!stack.empty()) {
-        stack.pop();
+    while (!this->_stack.empty()) {
+        this->_stack.pop();
     }
 }
