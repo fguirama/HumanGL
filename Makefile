@@ -16,7 +16,6 @@ SRCS		:=	\
 				class/MatrixStack.cpp\
 				class/Vector4.cpp\
 				utils/draw.cpp\
-				utils/multiply.cpp\
 				main.cpp
 
 INCS_D		:=	incs/
