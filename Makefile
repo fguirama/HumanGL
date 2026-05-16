@@ -65,10 +65,10 @@ $(DEPS_D)	:
 			mkdir -p $(DEPS_D)utils/
 
 leaks		:	all
-			$(VALGRIND) ./$(NAME)
+			$(VALGRIND) ./$(NAME) $(ARGS)
 
 run			:	all
-			./$(NAME)
+			./$(NAME) $(ARGS)
 
 debug		:
 			$(MAKE) re DEBUG=yes
