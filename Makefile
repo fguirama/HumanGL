@@ -53,9 +53,6 @@ VALGRIND	:=	valgrind \
 
 all			:	$(NAME)
 
-bonus		:	all
-			make -C ./bonus/
-
 $(NAME)		:	$(OBJS) $(IRCLIB_A)
 			$(CXX) $(FLAGS) -L/opt/homebrew/lib -lGLEW -lSDL2 -framework OpenGL -o $(NAME) $(OBJS)
 
@@ -91,4 +88,4 @@ re			:	fclean all
 
 FORCE		:
 
-.PHONY: all debug bonus leaks run re clean fclean FORCE
+.PHONY: all debug leaks run re clean fclean FORCE
