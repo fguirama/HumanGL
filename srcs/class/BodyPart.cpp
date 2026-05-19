@@ -19,40 +19,41 @@ void	BodyPart::setGeometryOffset(const float x, const float y, const float z) { 
 void	BodyPart::setColor(const std::string &str) { this->_color = Color(str); }
 
 BodyPart	*BodyPart::addChild(std::unique_ptr<BodyPart> child) {
+	BodyPart	*rawPtr = child.get();
+
 	child->_parent = this;
-	BodyPart* rawPtr = child.get();
 	_children.push_back(std::move(child));
 	return (rawPtr);
 }
 
 Matrix4 BodyPart::jointMatrix() const {
 	Matrix4	translation;
-	translation.translation(_localPosition.vector[0], _localPosition.vector[1], _localPosition.vector[2]);
+	translation.translation(_localPosition[0], _localPosition[1], _localPosition[2]);
 
 	Matrix4	rotate_x;
-	rotate_x.rotation(_localRotation.vector[0], X);
+	rotate_x.rotation(_localRotation[0], X);
 	Matrix4	rotate_y;
-	rotate_y.rotation(_localRotation.vector[1], Y);
+	rotate_y.rotation(_localRotation[1], Y);
 	Matrix4	rotate_z;
-	rotate_z.rotation(_localRotation.vector[2], Z);
+	rotate_z.rotation(_localRotation[2], Z);
 
 	return (translation * rotate_z * rotate_y * rotate_x);
 }
 
 Matrix4 BodyPart::drawMatrix() const {
 	Matrix4 geometry_offset;
-	geometry_offset.translation(_geometryOffset.vector[0], _geometryOffset.vector[1], _geometryOffset.vector[2]);
+	geometry_offset.translation(_geometryOffset[0], _geometryOffset[1], _geometryOffset[2]);
 
 	Matrix4 scaling;
-	scaling.scaling(_localScale.vector[0], _localScale.vector[1], _localScale.vector[2]);
+	scaling.scaling(_localScale[0], _localScale[1], _localScale[2]);
 
 	return (geometry_offset * scaling);
 }
 
 void BodyPart::draw(MatrixStack &stack, const Matrix4 &view_proj) const {
-	Matrix4	joint = stack.top() * jointMatrix();
-	Matrix4	model = joint * drawMatrix();
-	Matrix4	model_proj = view_proj * model;
+	const Matrix4	joint = stack.top() * jointMatrix();
+	const Matrix4	model = joint * drawMatrix();
+	const Matrix4	model_proj = view_proj * model;
 	drawCube(model_proj, _color);
 
 	stack.push(joint);
