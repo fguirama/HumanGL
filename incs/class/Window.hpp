@@ -22,12 +22,10 @@ private:
 	SDL_GLContext													_glContext = nullptr;
 	bool															_running = false;
 	AnimationState													_state = AnimationState::Idle;
-	// TODO AI --------
 	float															_cameraDistance = 8.0f;
 	float															_cameraYaw = 0.0f;
 	bool															_dragging = false;
 	int																_lastMouseX = 0;
-	// TODO ENDOF AI --------
 };
 
 #endif

@@ -1,6 +1,7 @@
 # ---------- VARIABLE ----------------------------------------------------------------- #
 INCS		:=	\
 				humanGL.h\
+				enum.h\
 				class/Window.hpp\
 				class/BodyPart.hpp\
 				class/Character.hpp\

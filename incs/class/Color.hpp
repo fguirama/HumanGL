@@ -5,15 +5,15 @@
 
 class Color {
 public:
-	Color(const std::string &str);
+	explicit Color(const std::string &str);
 	Color(const Color &src);
 	~Color();
 
 	Color &operator=(const Color &rhs);
 
-	float	getRed() const;
-	float	getGreen() const;
-	float	getBlue() const;
+	[[nodiscard]] float	getRed() const;
+	[[nodiscard]] float	getGreen() const;
+	[[nodiscard]] float	getBlue() const;
 
 private:
 	float	_r;

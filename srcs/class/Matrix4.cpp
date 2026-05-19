@@ -1,25 +1,25 @@
 #include "class/Matrix4.hpp"
 #include <cmath>
 
-Matrix4::Matrix4() {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            this->_matrix[i][j] = 0;
+Matrix4::Matrix4(): _matrix() {
+    for (auto & i : this->_matrix) {
+        for (double & j : i) {
+            j = 0;
         }
     }
 }
 
-Matrix4::Matrix4(const double mat[4][4]) {
+Matrix4::Matrix4(const double matrix[4][4]): _matrix() {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            this->_matrix[i][j] = mat[i][j];
+            this->_matrix[i][j] = matrix[i][j];
         }
     }
 }
 
-Matrix4::~Matrix4() {}
+Matrix4::~Matrix4() = default;
 
-Matrix4::Matrix4(Matrix4 const& copy) {
+Matrix4::Matrix4(const Matrix4 &copy): _matrix() {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             this->_matrix[i][j] = copy._matrix[i][j];
@@ -27,7 +27,7 @@ Matrix4::Matrix4(Matrix4 const& copy) {
     }
 }
 
-Matrix4& Matrix4::operator=(Matrix4 const& other) {
+Matrix4 &Matrix4::operator=(const Matrix4 &other) {
     if (this != &other) {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -36,10 +36,10 @@ Matrix4& Matrix4::operator=(Matrix4 const& other) {
         }
     }
 
-    return *this;
+    return (*this);
 }
 
-void Matrix4::identity() {
+void    Matrix4::identity() {
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             if (i == j)
@@ -50,24 +50,25 @@ void Matrix4::identity() {
     }
 }
 
-void Matrix4::translation(double x, double y, double z) {
+void    Matrix4::translation(const double x, const double y, const double z) {
     identity();
     this->_matrix[0][3] = x;
     this->_matrix[1][3] = y;
     this->_matrix[2][3] = z;
 }
 
-void Matrix4::scaling(double x, double y, double z) {
+void    Matrix4::scaling(const double x, const double y, const double z) {
     identity();
     this->_matrix[0][0] = x;
     this->_matrix[1][1] = y;
     this->_matrix[2][2] = z;
 }
 
-void Matrix4::rotation(double angle, Axis axis) {
+void    Matrix4::rotation(const double angle, const Axis axis) {
     identity();
-    double cosinus = std::cos(angle);
-    double sinus = std::sin(angle);
+    const double  cosinus = std::cos(angle);
+    const double  sinus = std::sin(angle);
+
     switch (axis) {
         case X:
             this->_matrix[1][1] = cosinus;
@@ -102,21 +103,21 @@ Matrix4 Matrix4::operator*(Matrix4 const& other) const {
         }
     }
 
-    return res;
+    return (res);
 }
 
 Vector4 Matrix4::operator*(Vector4 const& vec) const {
-    double res[4];
+    double  res[4];
 
     for (int i = 0; i < 4; i++) {
         double sum = 0;
         for (int j = 0; j < 4; j++) {
-            sum += this->_matrix[i][j] * vec.vector[j];
+            sum += this->_matrix[i][j] * vec[j];
         }
         res[i] = sum;
     }
 
-    return Vector4(res);
+    return (Vector4(res));
 }
 
 void    Matrix4::toFloatArray(float res[16]) const {
@@ -127,62 +128,41 @@ void    Matrix4::toFloatArray(float res[16]) const {
     }
 }
 
-// TODO AI --------
-static Vector4 vector_sub(Vector4 const& a, Vector4 const& b) {
-    return Vector4(a.vector[0] - b.vector[0], a.vector[1] - b.vector[1], a.vector[2] - b.vector[2]);
-}
+Matrix4 Matrix4::perspective(const double fov_y_radians, const double aspect, const double near_z, const double far_z) {
+    Matrix4         result;
+    const double    f = 1.0 / std::tan(fov_y_radians / 2.0);
 
-static double vector_dot(Vector4 const& a, Vector4 const& b) {
-    return a.vector[0] * b.vector[0] + a.vector[1] * b.vector[1] + a.vector[2] * b.vector[2];
-}
-
-static Vector4 vector_cross(Vector4 const& a, Vector4 const& b) {
-    return Vector4(
-        a.vector[1] * b.vector[2] - a.vector[2] * b.vector[1],
-        a.vector[2] * b.vector[0] - a.vector[0] * b.vector[2],
-        a.vector[0] * b.vector[1] - a.vector[1] * b.vector[0]);
-}
-
-static Vector4 vector_normalize(Vector4 const& v) {
-    double length = std::sqrt(v.vector[0] * v.vector[0] + v.vector[1] * v.vector[1] + v.vector[2] * v.vector[2]);
-    if (length == 0.0)
-        return Vector4(0.0, 0.0, 0.0);
-    return Vector4(v.vector[0] / length, v.vector[1] / length, v.vector[2] / length);
-}
-
-Matrix4 Matrix4::perspective(double fov_y_radians, double aspect, double near_z, double far_z) {
-    Matrix4 result;
-    double f = 1.0 / std::tan(fov_y_radians / 2.0);
     result._matrix[0][0] = f / aspect;
     result._matrix[1][1] = f;
     result._matrix[2][2] = (far_z + near_z) / (near_z - far_z);
     result._matrix[2][3] = (2.0 * far_z * near_z) / (near_z - far_z);
     result._matrix[3][2] = -1.0;
-    return result;
+    return (result);
 }
 
 Matrix4 Matrix4::lookAt(Vector4 const& eye, Vector4 const& center, Vector4 const& up) {
-    Vector4 f = vector_normalize(vector_sub(center, eye));
-    Vector4 s = vector_normalize(vector_cross(f, up));
-    Vector4 u = vector_cross(s, f);
+    Vector4 f = center - eye;
+    f.normalize();
+    Vector4 s = f * up;
+    s.normalize();
+    const   Vector4 u = s * f;
 
     Matrix4 result;
-    result._matrix[0][0] = s.vector[0];
-    result._matrix[0][1] = s.vector[1];
-    result._matrix[0][2] = s.vector[2];
-    result._matrix[0][3] = -vector_dot(s, eye);
+    result._matrix[0][0] = s[0];
+    result._matrix[0][1] = s[1];
+    result._matrix[0][2] = s[2];
+    result._matrix[0][3] = -s.dot(eye);
 
-    result._matrix[1][0] = u.vector[0];
-    result._matrix[1][1] = u.vector[1];
-    result._matrix[1][2] = u.vector[2];
-    result._matrix[1][3] = -vector_dot(u, eye);
+    result._matrix[1][0] = u[0];
+    result._matrix[1][1] = u[1];
+    result._matrix[1][2] = u[2];
+    result._matrix[1][3] = - u.dot(eye);
 
-    result._matrix[2][0] = -f.vector[0];
-    result._matrix[2][1] = -f.vector[1];
-    result._matrix[2][2] = -f.vector[2];
-    result._matrix[2][3] = vector_dot(f, eye);
+    result._matrix[2][0] = -f[0];
+    result._matrix[2][1] = -f[1];
+    result._matrix[2][2] = -f[2];
+    result._matrix[2][3] = f.dot(eye);
 
     result._matrix[3][3] = 1.0;
-    return result;
+    return (result);
 }
-// TODO ENDOF AI --------
