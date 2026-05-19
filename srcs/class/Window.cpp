@@ -115,15 +115,13 @@ void	Window::run() {
 
 		begin_frame(width, height);
 
-		// TODO AI --------
 		const double aspect = width > 0 ? static_cast<double>(width) / static_cast<double>(height) : 1.0;
-		constexpr double kPi = 3.141592653589793;
+		constexpr double kPi = std::numbers::pi;
 		Matrix4 projection = Matrix4::perspective(45.0 * (kPi / 180.0), aspect, 0.1, 100.0);
 		const double cam_x = std::sin(_cameraYaw) * _cameraDistance;
 		const double cam_z = std::cos(_cameraYaw) * _cameraDistance;
 		Matrix4 view = Matrix4::lookAt(Vector4(cam_x, 2.5, cam_z), Vector4(0.0, 1.0, 0.0), Vector4(0.0, 1.0, 0.0));
 		Matrix4 view_proj = projection * view;
-		// TODO ENDOF AI --------
 
 		stack.clear();
 		stack.push(identity);

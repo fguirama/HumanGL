@@ -33,7 +33,7 @@ NAME		:=	humanGL#
 # ---------- FLAGS -------------------------------------------------------------------- #
 CXX			:=	c++
 RM			:=	rm -rf
-FLAGS		=	-Werror -Wall -Wextra -MMD -MP -std=c++17 -g3
+FLAGS		=	-Werror -Wall -Wextra -MMD -MP -std=c++20 -g3
 
 
 # ---------- DEBUG -------------------------------------------------------------------- #
