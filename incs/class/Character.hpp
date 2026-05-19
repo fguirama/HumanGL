@@ -15,16 +15,20 @@ public:
 	void	draw(MatrixStack &stack, const Matrix4 &view_proj) const;
 
 private:
-	std::unique_ptr<BodyPart>	torso;
-	BodyPart	*head = nullptr;
-	BodyPart	*leftUpperArm = nullptr;
-	BodyPart	*leftForearm = nullptr;
-	BodyPart	*rightUpperArm = nullptr;
-	BodyPart	*rightForearm = nullptr;
-	BodyPart	*leftThigh = nullptr;
-	BodyPart	*leftLowerLeg = nullptr;
-	BodyPart	*rightThigh = nullptr;
-	BodyPart	*rightLowerLeg = nullptr;
+	std::unique_ptr<BodyPart>	_torso;
+	BodyPart	*_head = nullptr;
+	BodyPart	*_leftUpperArm = nullptr;
+	BodyPart	*_leftForearm = nullptr;
+	BodyPart	*_rightUpperArm = nullptr;
+	BodyPart	*_rightForearm = nullptr;
+
+	BodyPart	*_leftThigh = nullptr;
+	BodyPart	*_leftLowerLeg = nullptr;
+	BodyPart	*_leftFoot = nullptr;
+
+	BodyPart	*_rightThigh = nullptr;
+	BodyPart	*_rightLowerLeg = nullptr;
+	BodyPart	*_rightFoot = nullptr;
 };
 
 #endif
