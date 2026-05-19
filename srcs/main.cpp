@@ -1,4 +1,5 @@
 #include "class/Window.hpp"
+#include <iostream>
 
 void init_sdl();
 void close_sdl();
