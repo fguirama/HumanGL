@@ -10,8 +10,8 @@ Window::Window()
 
 Window::~Window() {
 	if (this->_glContext) {
-		SDL_GL_DeleteContext(_glContext);
-		_glContext = nullptr;
+		SDL_GL_DeleteContext(this->_glContext);
+		this->_glContext = nullptr;
 	}
 }
 
@@ -35,10 +35,10 @@ void	Window::init() {
 	if (!this->_window)
 		throw std::runtime_error(std::string("Error creating Window: ") + SDL_GetError());
 
-	_glContext = SDL_GL_CreateContext(this->_window.get());
-	if (!_glContext)
+	this->_glContext = SDL_GL_CreateContext(this->_window.get());
+	if (!this->_glContext)
 		throw std::runtime_error(std::string("Error creating GL context: ") + SDL_GetError());
-	SDL_GL_MakeCurrent(this->_window.get(), _glContext);
+	SDL_GL_MakeCurrent(this->_window.get(), this->_glContext);
 	SDL_GL_SetSwapInterval(1);
 
 	glewExperimental = GL_TRUE;
@@ -56,71 +56,71 @@ void	Window::run() {
 
 	const Uint64 start_ticks = SDL_GetTicks64();
 
-	while (_running) {
+	while (this->_running) {
 		Character character;
 		SDL_Event event;
 
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
-				_running = false;
+				this->_running = false;
 			} else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
 					case SDLK_ESCAPE:
-						_running = false;
+						this->_running = false;
 						break;
 					case SDLK_1:
-						_state = AnimationState::Idle;
+						this->_state = AnimationState::Idle;
 						break;
 					case SDLK_2:
-						_state = AnimationState::Walk;
+						this->_state = AnimationState::Walk;
 						break;
 					case SDLK_3:
-						_state = AnimationState::Jump;
+						this->_state = AnimationState::Jump;
 						break;
 					default:
 						break;
 				}
 			} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 				if (event.button.button == SDL_BUTTON_LEFT) {
-					_dragging = true;
-					_lastMouseX = event.button.x;
+					this->_dragging = true;
+					this->_lastMouseX = event.button.x;
 				}
 			} else if (event.type == SDL_MOUSEBUTTONUP) {
 				if (event.button.button == SDL_BUTTON_LEFT) {
-					_dragging = false;
+					this->_dragging = false;
 				}
 			} else if (event.type == SDL_MOUSEMOTION) {
-				if (_dragging) {
-					const int dx = event.motion.x - _lastMouseX;
-					_lastMouseX = event.motion.x;
-					_cameraYaw += static_cast<float>(dx) * 0.01f;
+				if (this->_dragging) {
+					const int dx = event.motion.x - this->_lastMouseX;
+					this->_lastMouseX = event.motion.x;
+					this->_cameraYaw += static_cast<float>(dx) * 0.01f;
 				}
 			} else if (event.type == SDL_MOUSEWHEEL) {
 				if (event.wheel.y != 0) {
-					_cameraDistance -= static_cast<float>(event.wheel.y) * 0.5f;
-					if (_cameraDistance < 3.0f)
-						_cameraDistance = 3.0f;
-					if (_cameraDistance > 20.0f)
-						_cameraDistance = 20.0f;
+					this->_cameraDistance -= static_cast<float>(event.wheel.y) * 0.5f;
+					if (this->_cameraDistance < 3.0f)
+						this->_cameraDistance = 3.0f;
+					if (this->_cameraDistance > 20.0f)
+						this->_cameraDistance = 20.0f;
 				}
 			}
 		}
 
 		const float time_seconds = static_cast<float>(SDL_GetTicks64() - start_ticks) / 1000.0f;
-		character.update(time_seconds, _state);
+		character.update(time_seconds, this->_state);
 
 		int width = 0;
 		int height = 0;
-		SDL_GetWindowSize(_window.get(), &width, &height);
+		SDL_GetWindowSize(this->_window.get(), &width, &height);
 
 		begin_frame(width, height);
 
 		const double aspect = width > 0 ? static_cast<double>(width) / static_cast<double>(height) : 1.0;
 		constexpr double kPi = std::numbers::pi;
 		Matrix4 projection = Matrix4::perspective(45.0 * (kPi / 180.0), aspect, 0.1, 100.0);
-		const double cam_x = std::sin(_cameraYaw) * _cameraDistance;
-		const double cam_z = std::cos(_cameraYaw) * _cameraDistance;
-		Matrix4 view = Matrix4::lookAt(Vector4(cam_x, 2.5, cam_z), Vector4(0.0, 1.0, 0.0), Vector4(0.0, 1.0, 0.0));
+		const double cam_x = std::sin(this->_cameraYaw) * this->_cameraDistance;
+		const double cam_z = std::cos(this->_cameraYaw) * this->_cameraDistance;
+		Matrix4 view = Matrix4::lookAt(Vector4(cam_x, 0, cam_z), Vector4(0.0, 0.0, 0.0), Vector4(0.0, 1.0, 0.0));
 		Matrix4 view_proj = projection * view;
 
 		stack.clear();
