@@ -2,7 +2,10 @@
 # define HUMANDGL_HUMANGL_H
 
 #include "class/Matrix4.hpp"
-#include "class/Vector4.hpp"
-#include "class/MatrixStack.hpp"
+
+void init_draw();
+void shutdown_draw();
+void begin_frame(int width, int height);
+void drawCube(const Matrix4 &mvp, const Color &color);
 
 #endif
