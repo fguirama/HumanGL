@@ -9,7 +9,7 @@ Window::Window()
 	: _title("HumanGL"), _window(nullptr, SDL_DestroyWindow) {}
 
 Window::~Window() {
-	if (_glContext) {
+	if (this->_glContext) {
 		SDL_GL_DeleteContext(_glContext);
 		_glContext = nullptr;
 	}
@@ -79,7 +79,7 @@ void	Window::run() {
 						break;
 					default:
 						break;
-				} // TODO AI --------
+				}
 			} else if (event.type == SDL_MOUSEBUTTONDOWN) {
 				if (event.button.button == SDL_BUTTON_LEFT) {
 					_dragging = true;
@@ -102,7 +102,7 @@ void	Window::run() {
 						_cameraDistance = 3.0f;
 					if (_cameraDistance > 20.0f)
 						_cameraDistance = 20.0f;
-				} // TODO ENDOF AI --------
+				}
 			}
 		}
 
