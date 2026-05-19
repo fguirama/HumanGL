@@ -1,6 +1,7 @@
 #include "class/Window.hpp"
-#include "utils/draw.hpp"
+#include "class/MatrixStack.hpp"
 #include <GL/glew.h>
+#include <cmath>
 #include <stdexcept>
 
 // CONSTRUCTOR - DESTRUCTOR ---------------------------------------------------
@@ -31,36 +32,34 @@ void	Window::init() {
 		WIDTH,
 		HEIGHT,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE));
-	if (!this->_window) {
+	if (!this->_window)
 		throw std::runtime_error(std::string("Error creating Window: ") + SDL_GetError());
-	}
 
 	_glContext = SDL_GL_CreateContext(this->_window.get());
-	if (!_glContext) {
+	if (!_glContext)
 		throw std::runtime_error(std::string("Error creating GL context: ") + SDL_GetError());
-	}
 	SDL_GL_MakeCurrent(this->_window.get(), _glContext);
 	SDL_GL_SetSwapInterval(1);
 
 	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK) {
+	if (glewInit() != GLEW_OK)
 		throw std::runtime_error("Error initializing GLEW.");
-	}
 
 	init_draw();
 }
 
 void	Window::run() {
-	_running = true;
-	Character character;
-	MatrixStack stack;
-	Matrix4 identity;
+	MatrixStack	stack;
+	Matrix4		identity;
 	identity.identity();
+	this->_running = true;
 
 	const Uint64 start_ticks = SDL_GetTicks64();
 
 	while (_running) {
+		Character character;
 		SDL_Event event;
+
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				_running = false;
@@ -80,7 +79,30 @@ void	Window::run() {
 						break;
 					default:
 						break;
+				} // TODO AI --------
+			} else if (event.type == SDL_MOUSEBUTTONDOWN) {
+				if (event.button.button == SDL_BUTTON_LEFT) {
+					_dragging = true;
+					_lastMouseX = event.button.x;
 				}
+			} else if (event.type == SDL_MOUSEBUTTONUP) {
+				if (event.button.button == SDL_BUTTON_LEFT) {
+					_dragging = false;
+				}
+			} else if (event.type == SDL_MOUSEMOTION) {
+				if (_dragging) {
+					const int dx = event.motion.x - _lastMouseX;
+					_lastMouseX = event.motion.x;
+					_cameraYaw += static_cast<float>(dx) * 0.01f;
+				}
+			} else if (event.type == SDL_MOUSEWHEEL) {
+				if (event.wheel.y != 0) {
+					_cameraDistance -= static_cast<float>(event.wheel.y) * 0.5f;
+					if (_cameraDistance < 3.0f)
+						_cameraDistance = 3.0f;
+					if (_cameraDistance > 20.0f)
+						_cameraDistance = 20.0f;
+				} // TODO ENDOF AI --------
 			}
 		}
 
@@ -93,11 +115,15 @@ void	Window::run() {
 
 		begin_frame(width, height);
 
+		// TODO AI --------
 		const double aspect = width > 0 ? static_cast<double>(width) / static_cast<double>(height) : 1.0;
-		const double kPi = 3.141592653589793;
+		constexpr double kPi = 3.141592653589793;
 		Matrix4 projection = Matrix4::perspective(45.0 * (kPi / 180.0), aspect, 0.1, 100.0);
-		Matrix4 view = Matrix4::lookAt(Vector4(0.0, 2.5, 8.0), Vector4(0.0, 1.0, 0.0), Vector4(0.0, 1.0, 0.0));
+		const double cam_x = std::sin(_cameraYaw) * _cameraDistance;
+		const double cam_z = std::cos(_cameraYaw) * _cameraDistance;
+		Matrix4 view = Matrix4::lookAt(Vector4(cam_x, 2.5, cam_z), Vector4(0.0, 1.0, 0.0), Vector4(0.0, 1.0, 0.0));
 		Matrix4 view_proj = projection * view;
+		// TODO ENDOF AI --------
 
 		stack.clear();
 		stack.push(identity);

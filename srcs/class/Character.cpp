@@ -1,4 +1,7 @@
 #include "class/Character.hpp"
+#include <algorithm>
+#include <cmath>
+#include <iostream>
 
 // CONSTRUCTOR - DESTRUCTOR ---------------------------------------------------
 Character::Character() {
@@ -18,12 +21,10 @@ void	Character::init() {
 	constexpr float upper_arm_length = 1.0f;
 	constexpr float upper_arm_width = 0.3f;
 	constexpr float forearm_length = 0.8f;
-	constexpr float forearm_width = 0.25f;
 
 	constexpr float thigh_length = 1.2f;
 	constexpr float thigh_width = 0.35f;
 	constexpr float lower_leg_length = 1.0f;
-	constexpr float lower_leg_width = 0.3f;
 
     // TORSO
     torso = std::make_unique<BodyPart>("torso");
@@ -49,7 +50,7 @@ void	Character::init() {
 
     auto left_forearm = std::make_unique<BodyPart>("leftForearm");
     left_forearm->setLocalPosition(0.0f, -upper_arm_length, 0.0f);
-    left_forearm->setLocalScale(forearm_width, forearm_length, forearm_width);
+    left_forearm->setLocalScale(upper_arm_width, forearm_length, upper_arm_width);
     left_forearm->setGeometryOffset(upper_arm_width * -0.5f, -forearm_length * 0.5f, 0.0f);
     left_forearm->setColor("#D8AD98");
 
@@ -62,7 +63,7 @@ void	Character::init() {
 
     auto right_forearm = std::make_unique<BodyPart>("rightForearm");
     right_forearm->setLocalPosition(0.0f, -upper_arm_length, 0.0f);
-    right_forearm->setLocalScale(forearm_width, forearm_length, forearm_width);
+    right_forearm->setLocalScale(upper_arm_width, forearm_length, upper_arm_width);
     right_forearm->setGeometryOffset(upper_arm_width * 0.5f, -forearm_length * 0.5f, 0.0f);
     right_forearm->setColor("#D8AD98");
 
@@ -77,7 +78,7 @@ void	Character::init() {
 
     auto left_lower_leg = std::make_unique<BodyPart>("leftLowerLeg");
     left_lower_leg->setLocalPosition(0.0f, -thigh_length, 0.0f);
-    left_lower_leg->setLocalScale(lower_leg_width, lower_leg_length, lower_leg_width);
+    left_lower_leg->setLocalScale(thigh_width, lower_leg_length, thigh_width);
     left_lower_leg->setGeometryOffset(0.0f, -lower_leg_length * 0.5f, 0.0f);
     left_lower_leg->setColor("#1F4B94");
 
@@ -90,7 +91,7 @@ void	Character::init() {
 
     auto right_lower_leg = std::make_unique<BodyPart>("rightLowerLeg");
     right_lower_leg->setLocalPosition(0.0f, -thigh_length, 0.0f);
-    right_lower_leg->setLocalScale(lower_leg_width, lower_leg_length, lower_leg_width);
+    right_lower_leg->setLocalScale(thigh_width, lower_leg_length, thigh_width);
     right_lower_leg->setGeometryOffset(0.0f, -lower_leg_length * 0.5f, 0.0f);
     right_lower_leg->setColor("#1F4B94");
 
@@ -115,79 +116,59 @@ void	Character::reset() {
 	this->init();
 }
 
-void Character::update(float time_seconds, AnimationState state) {
-	const float walk_speed = 2.8f;
-	const float walk_amplitude = 0.7f;
-	const float forearm_bend = 0.35f;
-	const float knee_bend = 0.45f;
-	const float jump_speed = 2.2f;
-	const float jump_height = 0.7f;
+void Character::update(const float time_seconds, const AnimationState state) const {
+	if (!torso || !head || !leftUpperArm || !rightUpperArm || !leftForearm || !rightForearm || !leftThigh || !rightThigh || !leftLowerLeg || !rightLowerLeg)
+		return ;
 
 	torso->setLocalPosition(0.0f, 0.0f, 0.0f);
+	head->setLocalRotation(0.0f, 0.0f, 0.0f);
+	leftUpperArm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	rightUpperArm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	leftForearm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	rightForearm->setLocalRotation(0.0f, 0.0f, 0.0f);
+	leftThigh->setLocalRotation(0.0f, 0.0f, 0.0f);
+	rightThigh->setLocalRotation(0.0f, 0.0f, 0.0f);
+	leftLowerLeg->setLocalRotation(0.0f, 0.0f, 0.0f);
+	rightLowerLeg->setLocalRotation(0.0f, 0.0f, 0.0f);
 
-	if (head)
-		head->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (leftUpperArm)
-		leftUpperArm->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (rightUpperArm)
-		rightUpperArm->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (leftForearm)
-		leftForearm->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (rightForearm)
-		rightForearm->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (leftThigh)
-		leftThigh->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (rightThigh)
-		rightThigh->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (leftLowerLeg)
-		leftLowerLeg->setLocalRotation(0.0f, 0.0f, 0.0f);
-	if (rightLowerLeg)
-		rightLowerLeg->setLocalRotation(0.0f, 0.0f, 0.0f);
-
+	// TODO AI --------
 	if (state == AnimationState::Walk) {
+
+		constexpr float knee_bend = 0.45f;
+		constexpr float forearm_bend = 0.35f;
+		constexpr float walk_amplitude = 0.7f;
+		constexpr float walk_speed = 2.8f;
 		const float phase = std::sin(time_seconds * walk_speed);
 		const float swing = phase * walk_amplitude;
 		const float bend = std::max(0.0f, std::sin(time_seconds * walk_speed)) * forearm_bend;
 		const float knee = std::max(0.0f, -std::sin(time_seconds * walk_speed)) * knee_bend;
 
-		if (leftUpperArm)
-			leftUpperArm->setLocalRotation(swing, 0.0f, 0.0f);
-		if (rightUpperArm)
-			rightUpperArm->setLocalRotation(-swing, 0.0f, 0.0f);
-		if (leftThigh)
-			leftThigh->setLocalRotation(-swing, 0.0f, 0.0f);
-		if (rightThigh)
-			rightThigh->setLocalRotation(swing, 0.0f, 0.0f);
-		if (leftForearm)
-			leftForearm->setLocalRotation(-bend, 0.0f, 0.0f);
-		if (rightForearm)
-			rightForearm->setLocalRotation(-bend, 0.0f, 0.0f);
-		if (leftLowerLeg)
-			leftLowerLeg->setLocalRotation(knee, 0.0f, 0.0f);
-		if (rightLowerLeg)
-			rightLowerLeg->setLocalRotation(knee, 0.0f, 0.0f);
+		leftUpperArm->setLocalRotation(swing, 0.0f, 0.0f);
+		rightUpperArm->setLocalRotation(-swing, 0.0f, 0.0f);
+		leftThigh->setLocalRotation(-swing, 0.0f, 0.0f);
+		rightThigh->setLocalRotation(swing, 0.0f, 0.0f);
+		leftForearm->setLocalRotation(-bend, 0.0f, 0.0f);
+		rightForearm->setLocalRotation(-bend, 0.0f, 0.0f);
+		leftLowerLeg->setLocalRotation(knee, 0.0f, 0.0f);
+		rightLowerLeg->setLocalRotation(knee, 0.0f, 0.0f);
 	}
 
 	if (state == AnimationState::Jump) {
+		constexpr float jump_height = 0.7f;
+		constexpr float jump_speed = 2.2f;
 		const float jump_phase = std::max(0.0f, std::sin(time_seconds * jump_speed));
+
 		torso->setLocalPosition(0.0f, jump_phase * jump_height, 0.0f);
-		if (leftUpperArm)
-			leftUpperArm->setLocalRotation(-0.6f, 0.0f, 0.0f);
-		if (rightUpperArm)
-			rightUpperArm->setLocalRotation(-0.6f, 0.0f, 0.0f);
-		if (leftForearm)
-			leftForearm->setLocalRotation(-0.3f, 0.0f, 0.0f);
-		if (rightForearm)
-			rightForearm->setLocalRotation(-0.3f, 0.0f, 0.0f);
-		if (leftThigh)
-			leftThigh->setLocalRotation(0.6f, 0.0f, 0.0f);
-		if (rightThigh)
-			rightThigh->setLocalRotation(0.6f, 0.0f, 0.0f);
-		if (leftLowerLeg)
-			leftLowerLeg->setLocalRotation(-0.6f, 0.0f, 0.0f);
-		if (rightLowerLeg)
-			rightLowerLeg->setLocalRotation(-0.6f, 0.0f, 0.0f);
+		leftUpperArm->setLocalRotation(-0.6f, 0.0f, 0.0f);
+		rightUpperArm->setLocalRotation(-0.6f, 0.0f, 0.0f);
+		leftForearm->setLocalRotation(-0.3f, 0.0f, 0.0f);
+		rightForearm->setLocalRotation(-0.3f, 0.0f, 0.0f);
+		leftThigh->setLocalRotation(0.6f, 0.0f, 0.0f);
+		rightThigh->setLocalRotation(0.6f, 0.0f, 0.0f);
+		leftLowerLeg->setLocalRotation(-0.6f, 0.0f, 0.0f);
+		rightLowerLeg->setLocalRotation(-0.6f, 0.0f, 0.0f);
 	}
+	// TODO ENDOF AI --------
 }
 
 void Character::draw(MatrixStack &stack, const Matrix4 &view_proj) const {

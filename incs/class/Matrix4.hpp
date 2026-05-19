@@ -28,6 +28,11 @@ class Matrix4 {
         Vector4 operator*(Vector4 const& vec) const;
 		void	toFloatArray(float res[16]) const;
 
+		// TODO AI --------
+		static Matrix4 perspective(double fov_y_radians, double aspect, double near_z, double far_z);
+		static Matrix4 lookAt(Vector4 const& eye, Vector4 const& center, Vector4 const& up);
+		// TODO ENDOF AI --------
+
 private:
         double  _matrix[4][4];
 };

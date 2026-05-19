@@ -126,3 +126,63 @@ void    Matrix4::toFloatArray(float res[16]) const {
         }
     }
 }
+
+// TODO AI --------
+static Vector4 vector_sub(Vector4 const& a, Vector4 const& b) {
+    return Vector4(a.vector[0] - b.vector[0], a.vector[1] - b.vector[1], a.vector[2] - b.vector[2]);
+}
+
+static double vector_dot(Vector4 const& a, Vector4 const& b) {
+    return a.vector[0] * b.vector[0] + a.vector[1] * b.vector[1] + a.vector[2] * b.vector[2];
+}
+
+static Vector4 vector_cross(Vector4 const& a, Vector4 const& b) {
+    return Vector4(
+        a.vector[1] * b.vector[2] - a.vector[2] * b.vector[1],
+        a.vector[2] * b.vector[0] - a.vector[0] * b.vector[2],
+        a.vector[0] * b.vector[1] - a.vector[1] * b.vector[0]);
+}
+
+static Vector4 vector_normalize(Vector4 const& v) {
+    double length = std::sqrt(v.vector[0] * v.vector[0] + v.vector[1] * v.vector[1] + v.vector[2] * v.vector[2]);
+    if (length == 0.0)
+        return Vector4(0.0, 0.0, 0.0);
+    return Vector4(v.vector[0] / length, v.vector[1] / length, v.vector[2] / length);
+}
+
+Matrix4 Matrix4::perspective(double fov_y_radians, double aspect, double near_z, double far_z) {
+    Matrix4 result;
+    double f = 1.0 / std::tan(fov_y_radians / 2.0);
+    result._matrix[0][0] = f / aspect;
+    result._matrix[1][1] = f;
+    result._matrix[2][2] = (far_z + near_z) / (near_z - far_z);
+    result._matrix[2][3] = (2.0 * far_z * near_z) / (near_z - far_z);
+    result._matrix[3][2] = -1.0;
+    return result;
+}
+
+Matrix4 Matrix4::lookAt(Vector4 const& eye, Vector4 const& center, Vector4 const& up) {
+    Vector4 f = vector_normalize(vector_sub(center, eye));
+    Vector4 s = vector_normalize(vector_cross(f, up));
+    Vector4 u = vector_cross(s, f);
+
+    Matrix4 result;
+    result._matrix[0][0] = s.vector[0];
+    result._matrix[0][1] = s.vector[1];
+    result._matrix[0][2] = s.vector[2];
+    result._matrix[0][3] = -vector_dot(s, eye);
+
+    result._matrix[1][0] = u.vector[0];
+    result._matrix[1][1] = u.vector[1];
+    result._matrix[1][2] = u.vector[2];
+    result._matrix[1][3] = -vector_dot(u, eye);
+
+    result._matrix[2][0] = -f.vector[0];
+    result._matrix[2][1] = -f.vector[1];
+    result._matrix[2][2] = -f.vector[2];
+    result._matrix[2][3] = vector_dot(f, eye);
+
+    result._matrix[3][3] = 1.0;
+    return result;
+}
+// TODO ENDOF AI --------

@@ -17,6 +17,7 @@ public:
 
 	void	init();
 	void	reset();
+	void	update(float time_seconds, AnimationState state) const;
 	void	draw(MatrixStack &stack, const Matrix4 &view_proj) const;
 
 private:
