@@ -162,15 +162,13 @@ void Character::update(const float time_seconds, const AnimationState state) con
 		constexpr float fps = 4.0f;
 		constexpr int frameCount = 8;
 
-		constexpr float frame_torso[8] =         {-0.2f, -0.3f, -0.1f, 0.0f, -0.2f, -0.3f, -0.1f, 0.0f};
-
-		constexpr float frame_left_thigh[8] =     {-0.5f, -0.2f, 0.2f, 0.8f, 0.9f, 1.3f, 0.0f, -0.3f};
-		constexpr float frame_left_lower_leg[8] =  {0.0f, -1.0f, -1.0f, -1.5f, 0.0f, -1.2f, 0.0f, 0.0f};
-		constexpr float frame_left_foot[8] =      {0.0f, 0.1f, -0.2f, -0.1f, 0.0f, 0.1f, 0.0f, -0.25f};
-
-		constexpr float	frame_right_thigh[8] =    {0.9f, 1.3f, 0.0f, -0.3f, -0.5f, -0.2f, 0.2f, 0.8f};
-		constexpr float frame_right_lower_leg[8] = {0.0f, -1.2f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f, -1.5f};
-		constexpr float frame_rightFoot[8] =     {0.0f, 0.1f, 0.0f, -0.25f, 0.0f, 0.1f, -0.2f, -0.1f};
+		constexpr float frame_torso[8]           = {-0.2f, -0.3f, -0.1f,  0.0f, -0.2f, -0.3f, -0.1f,  0.0f};
+		constexpr float frame_left_thigh[8]      = {-0.5f, -0.2f,  0.2f,  0.8f,  0.9f,  1.3f,  0.0f, -0.3f};
+		constexpr float frame_left_lower_leg[8]  = { 0.0f, -1.0f, -1.0f, -1.5f,  0.0f, -1.2f,  0.0f,  0.0f};
+		constexpr float frame_left_foot[8]       = { 0.0f,  0.1f, -0.2f, -0.1f,  0.0f,  0.1f,  0.0f, -0.3f};
+		constexpr float	frame_right_thigh[8]     = { 0.9f,  1.3f,  0.0f, -0.3f, -0.5f, -0.2f,  0.2f,  0.8f};
+		constexpr float frame_right_lower_leg[8] = { 0.0f, -1.2f,  0.0f,  0.0f,  0.0f, -1.0f, -1.0f, -1.5f};
+		constexpr float frame_rightFoot[8]       = { 0.0f,  0.1f,  0.0f, -0.2f,  0.0f,  0.1f, -0.2f, -0.1f};
 
 		auto [idx0, idx1, t] = calculateFrame(time_seconds, fps, frameCount);
 
@@ -197,21 +195,18 @@ void Character::update(const float time_seconds, const AnimationState state) con
 		constexpr float fps = 1.7f;
 		constexpr int frameCount = 8;
 
-		constexpr float position_torso[8] =  { 0.0f, -1.5f,  0.5f,  2.0f,  0.5f, -1.5f, 0.0f, 0.0f};
-		constexpr float frame_torso[8] =     { 0.0f, -0.8f, -0.1f, -0.4f,  0.1f, -0.8f, 0.1f, 0.0f};
-
-		constexpr float frame_right_thigh[8] =     { 0.1f,  2.2f, -0.1f,  2.0f,  0.5f,  2.2f, 0.1f, 0.0f};
+		constexpr float position_torso[8]        = { 0.0f, -1.5f,  0.5f,  2.0f,  0.5f, -1.5f,  0.0f, 0.0f};
+		constexpr float frame_torso[8]           = { 0.0f, -0.8f, -0.1f, -0.4f,  0.1f, -0.8f,  0.1f, 0.0f};
+		constexpr float frame_right_thigh[8]     = { 0.1f,  2.2f, -0.1f,  2.0f,  0.5f,  2.2f,  0.1f, 0.0f};
 		constexpr float frame_right_lower_leg[8] = {-0.2f, -2.2f, -0.2f, -2.0f, -0.3f, -2.2f, -0.3f, 0.0f};
-		constexpr float frame_right_foot[8] =      { 0.1f,  0.5f, -0.9f, -0.2f, -0.3f,  0.5f, 0.0f, 0.0f};
-
-		constexpr float frame_left_thigh[8] =     { 0.0f,  2.4f, -0.1f,  1.5f,  0.6f,  0.8f, -0.1f, 0.0f};
-		constexpr float frame_left_lower_leg[8] = { 0.0f, -2.2f, -0.2f, -2.0f, -0.3f, -2.2f, -0.3f, 0.0f};
-		constexpr float frame_left_foot[8] =      { -0.1f, 0.6f, -0.9f,  0.0f, -0.3f,  1.0f, 0.0f, 0.0f};
-
-		constexpr float	frame_z_arm[8] =      { 0.0f, 0.0f, 0.0f, 1.5f, 0.0f, 0.0f, 0.2f, 0.0f};
-		constexpr float	frame_left_arm[8] =   { 0.0f, -0.8f,  2.5f, -0.2f,  3.5f,  1.3f, -0.1f, 0.0f};
-		constexpr float	frame_right_arm[8] =  { 0.1f, -0.8f,  2.5f, -0.2f,  3.5f,  -0.7f, -0.1f, 0.0f};
-		constexpr float	frame_forearm[8] =    { 0.0f,  0.8f,  0.5f,  0.0f, -0.5f,  0.0f, 0.1f, 0.0f};
+		constexpr float frame_right_foot[8]      = { 0.1f,  0.5f, -0.9f, -0.2f, -0.3f,  0.5f,  0.0f, 0.0f};
+		constexpr float frame_left_thigh[8]      = { 0.0f,  2.4f, -0.1f,  1.5f,  0.6f,  0.8f, -0.1f, 0.0f};
+		constexpr float frame_left_lower_leg[8]  = { 0.0f, -2.2f, -0.2f, -2.0f, -0.3f, -2.2f, -0.3f, 0.0f};
+		constexpr float frame_left_foot[8]       = {-0.1f,  0.6f, -0.9f,  0.0f, -0.3f,  1.0f,  0.0f, 0.0f};
+		constexpr float	frame_z_arm[8]           = { 0.0f,  0.0f,  0.0f,  1.5f,  0.0f,  0.0f,  0.2f, 0.0f};
+		constexpr float	frame_left_arm[8]        = { 0.0f, -0.8f,  2.5f, -0.2f,  3.5f,  1.3f, -0.1f, 0.0f};
+		constexpr float	frame_right_arm[8]       = { 0.1f, -0.8f,  2.5f, -0.2f,  3.5f, -0.7f, -0.1f, 0.0f};
+		constexpr float	frame_forearm[8]         = { 0.0f,  0.8f,  0.5f,  0.0f, -0.5f,  0.0f,  0.1f, 0.0f};
 
 		auto [idx0, idx1, t] = calculateFrame(time_seconds, fps, frameCount);
 
@@ -232,15 +227,13 @@ void Character::update(const float time_seconds, const AnimationState state) con
 		this->_rightForearm->setLocalRotation(lerp(frame_forearm[idx0], frame_forearm[idx1], t), 0.0f, 0.0f);
 	}
 	if (state == AnimationState::Dance) {
-		constexpr float frame_torso[12]           = {0.0f, -0.05f,  0.2f, 0.05f, -0.2f,   0.05f,  0.2f,  0.05f, -0.2f, -0.05f,  0.2f};
-		constexpr float frame_left_thigh[12]      = {0.0f,  0.10f, -0.4f, 0.05f,  0.4f,  -0.05f, -0.4f, -0.05f,  0.4f,  0.05f, -0.4f};
-		constexpr float	frame_right_thigh[12]     = {0.0f,  0.10f, -0.4f, 0.05f,  0.4f,  -0.05f, -0.4f, -0.05f,  0.4f,  0.05f, -0.4f};
-
-		constexpr float frame_left_x_arm[12]      = {0.0f,   0.3f,  0.3f,  0.3f,   0.3f,  0.0f,  -0.3f, -0.3f,  -0.3f,  -0.3f,  -0.3f, 0.0f};
-		constexpr float frame_right_x_arm[12]     = {0.0f,  -0.3f, -0.3f,  -0.3f, -0.3f,  0.0f,   0.3f,  0.3f,   0.3f,   0.3f,   0.3f, 0.0f};
-
-		constexpr float frame_left_z_arm[12]      = {-0.3f,  0.3f,  -0.6f, 0.1f,   0.5f,  0.1f, -0.6,    0.1f,    0.5f,    0.1f,    -0.6f};
-		constexpr float frame_right_z_arm[12]     = { 0.3f,  0.3f,  -0.5f, 0.1f,   0.6f,  0.1f, -0.5,    0.1f,    0.6f,    0.1f,    -0.5f};
+		constexpr float frame_torso[11]           = { 0.0f, -0.05f,  0.2f,  0.05f, -0.2f,  0.05f,  0.2f,  0.05f, -0.2f, -0.05f,  0.2f};
+		constexpr float frame_left_thigh[11]      = { 0.0f,  0.10f, -0.4f,  0.05f,  0.4f, -0.05f, -0.4f, -0.05f,  0.4f,  0.05f, -0.4f};
+		constexpr float	frame_right_thigh[11]     = { 0.0f,  0.10f, -0.4f,  0.05f,  0.4f, -0.05f, -0.4f, -0.05f,  0.4f,  0.05f, -0.4f};
+		constexpr float frame_left_x_arm[11]      = { 0.0f,  0.30f,  0.3f,  0.30f,  0.3f,  0.00f, -0.3f, -0.30f, -0.3f, -0.30f, -0.3f};
+		constexpr float frame_right_x_arm[11]     = { 0.0f, -0.30f, -0.3f, -0.30f, -0.3f,  0.00f,  0.3f,  0.30f,  0.3f,  0.30f,  0.3f};
+		constexpr float frame_left_z_arm[11]      = {-0.3f,  0.30f, -0.6f,  0.10f,  0.5f,  0.10f, -0.6f,  0.10f,  0.5f,  0.10f, -0.6f};
+		constexpr float frame_right_z_arm[11]     = { 0.3f,  0.30f, -0.5f,  0.10f,  0.6f,  0.10f, -0.5f,  0.10f,  0.6f,  0.10f, -0.5f};
 
 		constexpr float fps = 5.0f;
 		constexpr int frameCount = 11;
