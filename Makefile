@@ -1,34 +1,21 @@
 # ---------- VARIABLE ----------------------------------------------------------------- #
-INCS		:=	\
-				humanGL.h\
-				enum.h\
-				class/Window.hpp\
-				class/BodyPart.hpp\
-				class/Character.hpp\
-				class/Matrix4.hpp\
-				class/MatrixStack.hpp\
-				class/Vector4.hpp\
-				class/Color.hpp
-
 SRCS		:=	\
-				class/Window.cpp\
-				class/BodyPart.cpp\
-				class/Character.cpp\
-				class/Matrix4.cpp\
-				class/MatrixStack.cpp\
-				class/Vector4.cpp\
-				class/Color.cpp\
-				utils/draw.cpp\
-				utils/animation.cpp\
-				main.cpp
+				srcs/class/Window.cpp\
+				srcs/class/BodyPart.cpp\
+				srcs/class/Character.cpp\
+				srcs/class/Matrix4.cpp\
+				srcs/class/MatrixStack.cpp\
+				srcs/class/Vector4.cpp\
+				srcs/class/Color.cpp\
+				srcs/utils/draw.cpp\
+				srcs/utils/animation.cpp\
+				srcs/main.cpp
 
 INCS_D		:=	incs/
 SRCS_D		:=	srcs/
 OBJS_D		:=	.objs/
-DEPS_D		:=	.deps/
-
-OBJS		:=	$(SRCS:%.cpp=$(OBJS_D)%.o)
-DEPS		:=	$(SRCS:%.cpp=$(DEPS_D)%.d)
+OBJS		=	$(addprefix $(OBJS_D), $(SRCS:.cpp=.o))
+DEPS		=	$(addprefix $(OBJS_D), $(SRCS:.cpp=.d))
 
 NAME		:=	humanGL#
 
@@ -50,26 +37,22 @@ VALGRIND	:=	valgrind \
 				--leak-check=full --show-leak-kinds=all\
 
 # ---------- RULES -------------------------------------------------------------------- #
--include $(DEPS)
 .DEFAULT_GOAL = all
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS) $(IRCLIB_A)
 			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -o $(NAME) $(OBJS) -lGLEW -lSDL2 -lGL
+$(NAME)		:	$(OBJS)
 
-$(OBJS)		:	$(OBJS_D)%.o: $(SRCS_D)%.cpp | $(OBJS_D) $(DEPS_D)
+-include $(DEPS)
 			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -I$(INCS_D) -c $< -o $@
+$(OBJS_D)%.o:	%.cpp | $(OBJS_D)
 
 $(OBJS_D)	:
 			mkdir -p $(OBJS_D)
-			mkdir -p $(OBJS_D)class/
-			mkdir -p $(OBJS_D)utils/
-
-$(DEPS_D)	:
-			mkdir -p $(DEPS_D)
-			mkdir -p $(DEPS_D)class/
-			mkdir -p $(DEPS_D)utils/
+			mkdir -p $(OBJS_D)srcs/
+			mkdir -p $(OBJS_D)srcs/class/
+			mkdir -p $(OBJS_D)srcs/utils/
 
 leaks		:	all
 			$(VALGRIND) ./$(NAME) $(ARGS)
@@ -81,7 +64,7 @@ debug		:
 			$(MAKE) re DEBUG=yes
 
 clean		:
-			$(RM) $(OBJS) $(OBJS_D) $(DEPS_D)
+			$(RM) $(OBJS_D)
 
 fclean		:	clean
 			$(RM) $(NAME)
