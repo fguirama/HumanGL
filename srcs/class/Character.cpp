@@ -29,9 +29,9 @@ void	Character::init() {
 	constexpr float feet_depth = 0.7f;
 	constexpr float z_feet = -feet_depth / 2 + thigh_width / 2;
 
-	constexpr std::string	c_torso = "#2B641A";
-	constexpr std::string	c_skin = "#D8AD98";
-	constexpr std::string	c_pants = "#1F4B94";
+	const std::string	c_torso = "#2B641A";
+	const std::string	c_skin = "#D8AD98";
+	const std::string	c_pants = "#1F4B94";
 
     // TORSO
     this->_torso = std::make_unique<BodyPart>("torso");
