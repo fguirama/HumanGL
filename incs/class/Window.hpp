@@ -24,6 +24,7 @@ private:
 	AnimationState													_state = AnimationState::Idle;
 	float															_cameraDistance = 13.0f;
 	float															_cameraYaw = 2.75f;
+	bool															_dragging = false;
 	int																_lastMouseX = 0;
 };
 
