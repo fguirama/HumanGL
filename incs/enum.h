@@ -10,7 +10,14 @@ enum Axis {
 enum class AnimationState {
 	Idle,
 	Walk,
-	Jump
+	Jump,
+	Dance
+};
+
+struct AnimationFrame {
+	int idx0;
+	int idx1;
+	float t;
 };
 
 #endif

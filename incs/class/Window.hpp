@@ -23,8 +23,7 @@ private:
 	bool															_running = false;
 	AnimationState													_state = AnimationState::Idle;
 	float															_cameraDistance = 13.0f;
-	float															_cameraYaw = 1.5f; // todo edit=
-	bool															_dragging = false;
+	float															_cameraYaw = 2.75f;
 	int																_lastMouseX = 0;
 };
 

@@ -77,6 +77,9 @@ void	Window::run() {
 					case SDLK_3:
 						this->_state = AnimationState::Jump;
 						break;
+					case SDLK_4:
+						this->_state = AnimationState::Dance;
+						break;
 					default:
 						break;
 				}

@@ -19,6 +19,7 @@ SRCS		:=	\
 				class/Vector4.cpp\
 				class/Color.cpp\
 				utils/draw.cpp\
+				utils/animation.cpp\
 				main.cpp
 
 INCS_D		:=	incs/

@@ -137,9 +137,8 @@ void	Character::reset() {
 	this->init();
 }
 
-static float lerp(const float a, const float b, const float t) {
-	return (a + (b - a) * t);
-}
+float lerp(float a, float b, float t);
+AnimationFrame calculateFrame(float time_seconds, float fps, int frameCount);
 
 void Character::update(const float time_seconds, const AnimationState state) const {
 	if (!this->_torso || !this->_head || !this->_leftUpperArm || !this->_rightUpperArm || !this->_leftForearm || !this->_rightForearm || !this->_leftThigh || !this->_rightThigh || !this->_leftLowerLeg || !this->_rightLowerLeg || !this->_leftFoot || !this->_rightFoot)
@@ -169,23 +168,18 @@ void Character::update(const float time_seconds, const AnimationState state) con
 		constexpr float frame_left_lower_leg[8] =  {0.0f, -1.0f, -1.0f, -1.5f, 0.0f, -1.2f, 0.0f, 0.0f};
 		constexpr float frame_left_foot[8] =      {0.0f, 0.1f, -0.2f, -0.1f, 0.0f, 0.1f, 0.0f, -0.25f};
 
-		constexpr float	frame_rightThigh[8] =    {0.9f, 1.3f, 0.0f, -0.3f, -0.5f, -0.2f, 0.2f, 0.8f};
-		constexpr float frame_rightLowerLeg[8] = {0.0f, -1.2f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f, -1.5f};
+		constexpr float	frame_right_thigh[8] =    {0.9f, 1.3f, 0.0f, -0.3f, -0.5f, -0.2f, 0.2f, 0.8f};
+		constexpr float frame_right_lower_leg[8] = {0.0f, -1.2f, 0.0f, 0.0f, 0.0f, -1.0f, -1.0f, -1.5f};
 		constexpr float frame_rightFoot[8] =     {0.0f, 0.1f, 0.0f, -0.25f, 0.0f, 0.1f, -0.2f, -0.1f};
 
-		float		frame = time_seconds * fps;
-		frame = std::fmod(frame, static_cast<float>(frameCount));
-		const int	idx0 = static_cast<int>(std::floor(frame));
-		const int	idx1 = (idx0 + 1) % frameCount;
-		float		t = frame - idx0;
-		t = t * t * (3.0f - 2.0f * t);
+		auto [idx0, idx1, t] = calculateFrame(time_seconds, fps, frameCount);
 
 		this->_torso->setLocalRotation(lerp(frame_torso[idx0], frame_torso[idx1], t), 0.0f, 0.0f);
 		this->_leftThigh->setLocalRotation(lerp(frame_left_thigh[idx0], frame_left_thigh[idx1], t), 0.0f, 0.0f);
-		this->_rightThigh->setLocalRotation(lerp(frame_rightThigh[idx0], frame_rightThigh[idx1], t), 0.0f, 0.0f);
+		this->_rightThigh->setLocalRotation(lerp(frame_right_thigh[idx0], frame_right_thigh[idx1], t), 0.0f, 0.0f);
 
 		this->_leftLowerLeg->setLocalRotation(lerp(frame_left_lower_leg[idx0], frame_left_lower_leg[idx1], t), 0.0f, 0.0f);
-		this->_rightLowerLeg->setLocalRotation(lerp(frame_rightLowerLeg[idx0], frame_rightLowerLeg[idx1], t), 0.0f, 0.0f);
+		this->_rightLowerLeg->setLocalRotation(lerp(frame_right_lower_leg[idx0], frame_right_lower_leg[idx1], t), 0.0f, 0.0f);
 
 		this->_leftFoot->setLocalRotation(lerp(frame_left_foot[idx0], frame_left_foot[idx1], t), 0.0f, 0.0f);
 		this->_rightFoot->setLocalRotation(lerp(frame_rightFoot[idx0], frame_rightFoot[idx1], t), 0.0f, 0.0f);
@@ -198,16 +192,10 @@ void Character::update(const float time_seconds, const AnimationState state) con
 		this->_leftForearm->setLocalRotation(0.6f, 0.0f, 0.0f);
 		this->_rightForearm->setLocalRotation(0.6f, 0.0f, 0.0f);
 	}
-	// todo make danse animation
+
 	if (state == AnimationState::Jump) {
 		constexpr float fps = 1.7f;
 		constexpr int frameCount = 8;
-		float		frame = time_seconds * fps;
-		frame = std::fmod(frame, static_cast<float>(frameCount));
-		const int	idx0 = static_cast<int>(std::floor(frame));
-		const int	idx1 = (idx0 + 1) % frameCount;
-		float		t = frame - idx0;
-		t = t * t * (3.0f - 2.0f * t);
 
 		constexpr float position_torso[8] =  { 0.0f, -1.5f,  0.5f,  2.0f,  0.5f, -1.5f, 0.0f, 0.0f};
 		constexpr float frame_torso[8] =     { 0.0f, -0.8f, -0.1f, -0.4f,  0.1f, -0.8f, 0.1f, 0.0f};
@@ -225,6 +213,8 @@ void Character::update(const float time_seconds, const AnimationState state) con
 		constexpr float	frame_right_arm[8] =  { 0.1f, -0.8f,  2.5f, -0.2f,  3.5f,  -0.7f, -0.1f, 0.0f};
 		constexpr float	frame_forearm[8] =    { 0.0f,  0.8f,  0.5f,  0.0f, -0.5f,  0.0f, 0.1f, 0.0f};
 
+		auto [idx0, idx1, t] = calculateFrame(time_seconds, fps, frameCount);
+
 		this->_torso->setLocalPosition(0.0f, lerp(position_torso[idx0], position_torso[idx1], t), 0.0f);
 		this->_torso->setLocalRotation(lerp(frame_torso[idx0], frame_torso[idx1], t), 0.0f, 0.0f);
 		this->_leftThigh->setLocalRotation(lerp(frame_left_thigh[idx0], frame_left_thigh[idx1], t), 0.0f, 0.0f);
@@ -240,6 +230,31 @@ void Character::update(const float time_seconds, const AnimationState state) con
 		this->_rightUpperArm->setLocalRotation(lerp(frame_right_arm[idx0], frame_right_arm[idx1], t), 0.0f, lerp(frame_z_arm[idx0], frame_z_arm[idx1], t));
 		this->_leftForearm->setLocalRotation(lerp(frame_forearm[idx0], frame_forearm[idx1], t), 0.0f, 0.0f);
 		this->_rightForearm->setLocalRotation(lerp(frame_forearm[idx0], frame_forearm[idx1], t), 0.0f, 0.0f);
+	}
+	if (state == AnimationState::Dance) {
+		constexpr float frame_torso[12]           = {0.0f, -0.05f,  0.2f, 0.05f, -0.2f,   0.05f,  0.2f,  0.05f, -0.2f, -0.05f,  0.2f};
+		constexpr float frame_left_thigh[12]      = {0.0f,  0.10f, -0.4f, 0.05f,  0.4f,  -0.05f, -0.4f, -0.05f,  0.4f,  0.05f, -0.4f};
+		constexpr float	frame_right_thigh[12]     = {0.0f,  0.10f, -0.4f, 0.05f,  0.4f,  -0.05f, -0.4f, -0.05f,  0.4f,  0.05f, -0.4f};
+
+		constexpr float frame_left_x_arm[12]      = {0.0f,   0.3f,  0.3f,  0.3f,   0.3f,  0.0f,  -0.3f, -0.3f,  -0.3f,  -0.3f,  -0.3f, 0.0f};
+		constexpr float frame_right_x_arm[12]     = {0.0f,  -0.3f, -0.3f,  -0.3f, -0.3f,  0.0f,   0.3f,  0.3f,   0.3f,   0.3f,   0.3f, 0.0f};
+
+		constexpr float frame_left_z_arm[12]      = {-0.3f,  0.3f,  -0.6f, 0.1f,   0.5f,  0.1f, -0.6,    0.1f,    0.5f,    0.1f,    -0.6f};
+		constexpr float frame_right_z_arm[12]     = { 0.3f,  0.3f,  -0.5f, 0.1f,   0.6f,  0.1f, -0.5,    0.1f,    0.6f,    0.1f,    -0.5f};
+
+		constexpr float fps = 5.0f;
+		constexpr int frameCount = 11;
+		auto [idx0, idx1, t] = calculateFrame(time_seconds, fps, frameCount);
+
+		this->_torso->setLocalRotation(0.0f, 0.0f, lerp(frame_torso[idx0], frame_torso[idx1], t));
+		this->_head->setLocalRotation(0.0f, 0.0f, -lerp(frame_torso[idx0], frame_torso[idx1], t));
+		this->_leftFoot->setLocalRotation(0.0f, 0.0f, lerp(frame_torso[idx0], frame_torso[idx1], t));
+		this->_rightFoot->setLocalRotation(0.0f, 0.0f, lerp(frame_torso[idx0], frame_torso[idx1], t));
+		this->_leftThigh->setLocalRotation(0.0f, 0.0f, lerp(frame_left_thigh[idx0], frame_left_thigh[idx1], t));
+		this->_rightThigh->setLocalRotation(0.0f, 0.0f, lerp(frame_right_thigh[idx0], frame_right_thigh[idx1], t));
+
+		this->_leftUpperArm->setLocalRotation(lerp(frame_left_x_arm[idx0], frame_left_x_arm[idx1], t), 0.0f, lerp(frame_left_z_arm[idx0], frame_left_z_arm[idx1], t));
+		this->_rightUpperArm->setLocalRotation(lerp(frame_right_x_arm[idx0], frame_right_x_arm[idx1], t), 0.0f, lerp(frame_right_z_arm[idx0], frame_right_z_arm[idx1], t));
 	}
 }
 
