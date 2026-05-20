@@ -41,12 +41,12 @@ VALGRIND	:=	valgrind \
 
 all			:	$(NAME)
 
-			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -o $(NAME) $(OBJS) -lGLEW -lSDL2 -lGL
 $(NAME)		:	$(OBJS)
+			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -o $(NAME) $(OBJS) -lGLEW -lSDL2 -lGL
 
 -include $(DEPS)
-			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -I$(INCS_D) -c $< -o $@
 $(OBJS_D)%.o:	%.cpp | $(OBJS_D)
+			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -I$(INCS_D) -c $< -o $@
 
 $(OBJS_D)	:
 			mkdir -p $(OBJS_D)
