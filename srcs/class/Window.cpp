@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <cmath>
 #include <stdexcept>
+#include <numbers>
 
 // CONSTRUCTOR - DESTRUCTOR ---------------------------------------------------
 Window::Window()

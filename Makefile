@@ -17,6 +17,18 @@ OBJS_D		:=	.objs/
 OBJS		=	$(addprefix $(OBJS_D), $(SRCS:.cpp=.o))
 DEPS		=	$(addprefix $(OBJS_D), $(SRCS:.cpp=.d))
 
+UNAME		=	$(shell uname -s)
+
+ifeq ($(UNAME), Linux)
+FLAGS_LIB	:=	-lGLEW -lSDL2 -lGL
+FLAGS_INC	:=	-I/usr/include/SDL2 -D_REENTRANT
+endif
+
+ifeq ($(UNAME), Darwin)
+FLAGS_LIB	:=	-L/opt/homebrew/lib -lGLEW -lSDL2 -framework OpenGL
+FLAGS_INC	:=	-I/opt/homebrew/include
+endif
+
 NAME		:=	humanGL#
 
 # ---------- FLAGS -------------------------------------------------------------------- #
@@ -42,11 +54,13 @@ VALGRIND	:=	valgrind \
 all			:	$(NAME)
 
 $(NAME)		:	$(OBJS)
-			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -o $(NAME) $(OBJS) -lGLEW -lSDL2 -lGL
+#			$(CXX) $(FLAGS) -L/opt/homebrew/lib -lGLEW -lSDL2 -framework OpenGL -o $(NAME) $(OBJS) // todo test sur linux
+#			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -o $(NAME) $(OBJS) -lGLEW -lSDL2 -lGL
+			$(CXX) $(FLAGS) $(FLAGS_LIB) -o $(NAME) $(OBJS)
 
 -include $(DEPS)
 $(OBJS_D)%.o:	%.cpp | $(OBJS_D)
-			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -I$(INCS_D) -c $< -o $@
+			$(CXX) $(FLAGS) $(FLAGS_INC) -I$(INCS_D) -c $< -o $@
 
 $(OBJS_D)	:
 			mkdir -p $(OBJS_D)
