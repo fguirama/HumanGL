@@ -159,7 +159,7 @@ void Character::update(const float time_seconds, const AnimationState state) con
 	this->_rightForearm->setLocalRotation(0.0f, 0.0f, 0.0f);
 
 	if (state == AnimationState::Walk) {
-		constexpr float fps = 4.0f;
+		constexpr float fps = 6.0f;
 		constexpr int frameCount = 8;
 
 		constexpr float frame_torso[8]           = {-0.2f, -0.3f, -0.1f,  0.0f, -0.2f, -0.3f, -0.1f,  0.0f};
@@ -192,7 +192,7 @@ void Character::update(const float time_seconds, const AnimationState state) con
 	}
 
 	if (state == AnimationState::Jump) {
-		constexpr float fps = 1.7f;
+		constexpr float fps = 2.0f;
 		constexpr int frameCount = 8;
 
 		constexpr float position_torso[8]        = { 0.0f, -1.5f,  0.5f,  2.0f,  0.5f, -1.5f,  0.0f, 0.0f};
