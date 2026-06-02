@@ -53,13 +53,13 @@ VALGRIND	:=	valgrind \
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJS)
+$(NAME)		:	$(OBJS_D) $(OBJS)
 #			$(CXX) $(FLAGS) -L/opt/homebrew/lib -lGLEW -lSDL2 -framework OpenGL -o $(NAME) $(OBJS) // todo test sur linux
 #			$(CXX) $(FLAGS) -I/usr/include/SDL2 -D_REENTRANT -o $(NAME) $(OBJS) -lGLEW -lSDL2 -lGL
 			$(CXX) $(FLAGS) $(FLAGS_LIB) -o $(NAME) $(OBJS)
 
 -include $(DEPS)
-$(OBJS_D)%.o:	%.cpp | $(OBJS_D)
+$(OBJS_D)%.o:	%.cpp
 			$(CXX) $(FLAGS) $(FLAGS_INC) -I$(INCS_D) -c $< -o $@
 
 $(OBJS_D)	:
