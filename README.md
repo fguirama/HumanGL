@@ -4,9 +4,9 @@ HumanGL is a C++20 OpenGL/SDL2 demo that renders a hierarchical 3D character and
 
 ## Preview
 
-![HumanGL screenshot](./.img/img1.png)
+![HumanGL screenshot](./.img/img.png)
 
-![HumanGL demo gif](./.img/3-video.gif)
+![HumanGL demo gif](./.img/video.gif)
 
 
 ## Features
